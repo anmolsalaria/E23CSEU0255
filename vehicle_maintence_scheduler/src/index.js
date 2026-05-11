@@ -1,1 +1,5 @@
-// Entry point placeholder for the vehicle maintenance scheduler service.
+const app = require("./app");
+
+module.exports = {
+	app,
+};
