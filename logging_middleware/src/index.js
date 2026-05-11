@@ -1,1 +1,5 @@
-// Entry point placeholder for the logging middleware service.
+const { Log } = require("./services/loggingService");
+
+module.exports = {
+	Log,
+};
