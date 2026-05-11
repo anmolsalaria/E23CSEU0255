@@ -7,7 +7,7 @@ let cachedTokenExpiresAt = 0;
 const buildAuthPayload = () => ({
   clientId: affordmedConfig.clientId,
   clientSecret: affordmedConfig.clientSecret,
-  companyName: affordmedConfig.companyName,
+  accessCode: affordmedConfig.accessCode,
   ownerName: affordmedConfig.ownerName,
   ownerEmail: affordmedConfig.ownerEmail,
   ownerRollNo: affordmedConfig.ownerRollNo,

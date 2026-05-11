@@ -1,14 +1,17 @@
 require("./env");
 
+const baseUrl = process.env.BASE_URL;
+
 const affordmedConfig = {
-  authUrl: process.env.AFFORDMED_AUTH_URL,
-  logUrl: process.env.AFFORDMED_LOG_URL,
-  clientId: process.env.AFFORDMED_CLIENT_ID,
-  clientSecret: process.env.AFFORDMED_CLIENT_SECRET,
-  companyName: process.env.AFFORDMED_COMPANY_NAME,
-  ownerName: process.env.AFFORDMED_OWNER_NAME,
-  ownerEmail: process.env.AFFORDMED_OWNER_EMAIL,
-  ownerRollNo: process.env.AFFORDMED_OWNER_ROLL_NO,
+  baseUrl,
+  authUrl: baseUrl ? `${baseUrl.replace(/\/$/, "")}/auth` : null,
+  logUrl: baseUrl ? `${baseUrl.replace(/\/$/, "")}/log` : null,
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  accessCode: process.env.ACCESS_CODE,
+  ownerName: process.env.NAME,
+  ownerEmail: process.env.EMAIL,
+  ownerRollNo: process.env.ROLL_NO,
 };
 
 module.exports = {
