@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const http = require("http");
 const app = require("./app");
 const { Log } = require("../../logging_middleware/src");
@@ -10,9 +12,11 @@ const logStartup = async (message, level = "info") => {
 };
 
 server.listen(PORT, async () => {
-  await logStartup(`Notification service listening on port ${PORT}.`);
+  console.log(`Notification service running on port ${PORT}`);
+  await logStartup(`Notification service running on port ${PORT}.`);
 });
 
 server.on("error", async (error) => {
+  console.error(`Notification service failed to start: ${error.message}`);
   await logStartup(`Server startup error: ${error.message}`, "error");
 });

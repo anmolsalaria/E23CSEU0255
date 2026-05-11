@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const http = require("http");
 const app = require("./app");
 const { Log } = require("../../logging_middleware/src");
@@ -11,9 +13,11 @@ const logStartup = async (message, level = "info") => {
 };
 
 server.listen(PORT, async () => {
-  await logStartup(`Vehicle maintenance scheduler listening on port ${PORT}.`);
+  console.log(`Vehicle maintenance service running on port ${PORT}`);
+  await logStartup(`Vehicle maintenance service running on port ${PORT}.`);
 });
 
 server.on("error", async (error) => {
+  console.error(`Vehicle maintenance service failed to start: ${error.message}`);
   await logStartup(`Server startup error: ${error.message}`, "error");
 });
