@@ -32,7 +32,9 @@ const validateStatusUpdate = (payload) => {
     throw new AppError("Invalid status.", 400);
   }
 
-  return payload.status;
+  return {
+    status: payload.status,
+  };
 };
 
 module.exports = {

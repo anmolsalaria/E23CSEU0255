@@ -5,6 +5,14 @@ const sendSuccess = (res, data, message, statusCode = 200) => {
   });
 };
 
+const sendError = (res, message, statusCode = 500) => {
+  res.status(statusCode).json({
+    message,
+    error: message,
+  });
+};
+
 module.exports = {
   sendSuccess,
+  sendError,
 };

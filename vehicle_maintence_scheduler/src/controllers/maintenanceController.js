@@ -4,7 +4,6 @@ const {
   listUpcomingMaintenance,
   updateMaintenanceStatus,
 } = require("../services/maintenanceService");
-const { validateStatusUpdate } = require("../utils/maintenanceValidation");
 const { parseId } = require("../utils/validationHelpers");
 const { AppError } = require("../utils/errors");
 const { sendSuccess } = require("../utils/response");
@@ -32,7 +31,7 @@ const getUpcomingMaintenanceHandler = async (req, res, next) => {
 const updateMaintenanceStatusHandler = async (req, res, next) => {
   try {
     const id = parseId(req.params.id, "maintenance id");
-    const status = validateStatusUpdate(req.validatedBody);
+    const { status } = req.validatedBody;
 
     const maintenance = await updateMaintenanceStatus(id, status);
     if (!maintenance) {

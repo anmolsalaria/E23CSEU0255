@@ -1,5 +1,6 @@
 const { Log } = require("../../../logging_middleware/src");
 const { AppError } = require("../utils/errors");
+const { sendError } = require("../utils/response");
 
 const errorHandler = async (error, req, res, next) => {
   const statusCode = error instanceof AppError ? error.statusCode : 500;
@@ -12,7 +13,7 @@ const errorHandler = async (error, req, res, next) => {
     `Error handling ${req.method} ${req.originalUrl}: ${message}`
   );
 
-  res.status(statusCode).json({ error: message });
+  sendError(res, message, statusCode);
 };
 
 module.exports = {

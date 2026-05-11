@@ -8,7 +8,7 @@ let nextId = 1;
 const createMaintenance = async (payload) => {
   await Log("backend", "info", "service", "Creating maintenance entry.");
 
-  const vehicle = getVehicleById(payload.vehicleId);
+  const vehicle = await getVehicleById(payload.vehicleId);
   if (!vehicle) {
     throw new AppError("Vehicle not found.", 404);
   }

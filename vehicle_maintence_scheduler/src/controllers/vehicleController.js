@@ -13,7 +13,7 @@ const { sendSuccess } = require("../utils/response");
 const getAllVehicles = async (req, res, next) => {
   try {
     await Log("backend", "info", "controller", "Fetching all vehicles.");
-    const vehicles = listVehicles();
+    const vehicles = await listVehicles();
     sendSuccess(res, vehicles, "Vehicles retrieved.");
   } catch (error) {
     next(error);
@@ -24,7 +24,7 @@ const getVehicle = async (req, res, next) => {
   try {
     const id = parseId(req.params.id, "vehicle id");
 
-    const vehicle = getVehicleById(id);
+    const vehicle = await getVehicleById(id);
     if (!vehicle) {
       throw new AppError("Vehicle not found.", 404);
     }
@@ -38,7 +38,7 @@ const getVehicle = async (req, res, next) => {
 
 const createVehicleHandler = async (req, res, next) => {
   try {
-    const vehicle = createVehicle(req.validatedBody);
+    const vehicle = await createVehicle(req.validatedBody);
     await Log("backend", "info", "controller", `Created vehicle ${vehicle.id}.`);
     sendSuccess(res, vehicle, "Vehicle created.", 201);
   } catch (error) {
@@ -50,7 +50,7 @@ const updateVehicleHandler = async (req, res, next) => {
   try {
     const id = parseId(req.params.id, "vehicle id");
 
-    const vehicle = updateVehicle(id, req.validatedBody);
+    const vehicle = await updateVehicle(id, req.validatedBody);
     if (!vehicle) {
       throw new AppError("Vehicle not found.", 404);
     }
@@ -66,7 +66,7 @@ const deleteVehicleHandler = async (req, res, next) => {
   try {
     const id = parseId(req.params.id, "vehicle id");
 
-    const removed = deleteVehicle(id);
+    const removed = await deleteVehicle(id);
     if (!removed) {
       throw new AppError("Vehicle not found.", 404);
     }
