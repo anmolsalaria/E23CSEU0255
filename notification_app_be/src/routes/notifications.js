@@ -5,10 +5,12 @@ const {
   markReadHandler,
 } = require("../controllers/notificationController");
 const { Log } = require("../../../logging_middleware/src");
+const { validateRequest } = require("../middleware/validateRequest");
+const { validateNotificationPayload } = require("../utils/notificationValidation");
 
 const router = express.Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", validateRequest(validateNotificationPayload, "notification create"), async (req, res, next) => {
   await Log("backend", "info", "route", "POST /notifications requested.");
   return createNotificationHandler(req, res, next);
 });

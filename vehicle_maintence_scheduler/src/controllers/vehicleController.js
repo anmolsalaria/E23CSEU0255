@@ -6,7 +6,6 @@ const {
   updateVehicle,
   deleteVehicle,
 } = require("../services/vehicleService");
-const { validateVehiclePayload } = require("../utils/vehicleValidation");
 const { AppError } = require("../utils/errors");
 const { parseId } = require("../utils/validationHelpers");
 const { sendSuccess } = require("../utils/response");
@@ -39,8 +38,7 @@ const getVehicle = async (req, res, next) => {
 
 const createVehicleHandler = async (req, res, next) => {
   try {
-    validateVehiclePayload(req.body);
-    const vehicle = createVehicle(req.body);
+    const vehicle = createVehicle(req.validatedBody);
     await Log("backend", "info", "controller", `Created vehicle ${vehicle.id}.`);
     sendSuccess(res, vehicle, "Vehicle created.", 201);
   } catch (error) {
@@ -52,8 +50,7 @@ const updateVehicleHandler = async (req, res, next) => {
   try {
     const id = parseId(req.params.id, "vehicle id");
 
-    validateVehiclePayload(req.body);
-    const vehicle = updateVehicle(id, req.body);
+    const vehicle = updateVehicle(id, req.validatedBody);
     if (!vehicle) {
       throw new AppError("Vehicle not found.", 404);
     }

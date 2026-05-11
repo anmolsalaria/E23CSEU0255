@@ -4,7 +4,6 @@ const {
   createNotification,
   markNotificationRead,
 } = require("../services/notificationService");
-const { validateNotificationPayload } = require("../utils/notificationValidation");
 const { parseId } = require("../utils/validationHelpers");
 const { AppError } = require("../utils/errors");
 const { sendSuccess } = require("../utils/response");
@@ -22,8 +21,7 @@ const getNotifications = async (req, res, next) => {
 const createNotificationHandler = async (req, res, next) => {
   try {
     await Log("backend", "info", "controller", "Creating notification.");
-    validateNotificationPayload(req.body);
-    const notification = await createNotification(req.body);
+    const notification = await createNotification(req.validatedBody);
     sendSuccess(res, notification, "Notification created.", 201);
   } catch (error) {
     next(error);

@@ -19,6 +19,14 @@ const validateVehiclePayload = (payload) => {
   if (!isValidDateString(payload.serviceDueDate)) {
     throw new AppError("Invalid serviceDueDate.", 400);
   }
+
+  return {
+    vehicleNumber: payload.vehicleNumber,
+    ownerName: payload.ownerName,
+    model: payload.model,
+    serviceDueDate: payload.serviceDueDate,
+    status: payload.status,
+  };
 };
 
 module.exports = {

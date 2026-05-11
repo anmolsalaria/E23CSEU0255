@@ -4,10 +4,7 @@ const {
   listUpcomingMaintenance,
   updateMaintenanceStatus,
 } = require("../services/maintenanceService");
-const {
-  validateMaintenancePayload,
-  validateStatusUpdate,
-} = require("../utils/maintenanceValidation");
+const { validateStatusUpdate } = require("../utils/maintenanceValidation");
 const { parseId } = require("../utils/validationHelpers");
 const { AppError } = require("../utils/errors");
 const { sendSuccess } = require("../utils/response");
@@ -15,8 +12,7 @@ const { sendSuccess } = require("../utils/response");
 const createMaintenanceHandler = async (req, res, next) => {
   try {
     await Log("backend", "info", "controller", "Scheduling maintenance.");
-    const payload = validateMaintenancePayload(req.body);
-    const maintenance = await createMaintenance(payload);
+    const maintenance = await createMaintenance(req.validatedBody);
     sendSuccess(res, maintenance, "Maintenance scheduled.", 201);
   } catch (error) {
     next(error);
@@ -36,7 +32,7 @@ const getUpcomingMaintenanceHandler = async (req, res, next) => {
 const updateMaintenanceStatusHandler = async (req, res, next) => {
   try {
     const id = parseId(req.params.id, "maintenance id");
-    const status = validateStatusUpdate(req.body);
+    const status = validateStatusUpdate(req.validatedBody);
 
     const maintenance = await updateMaintenanceStatus(id, status);
     if (!maintenance) {
