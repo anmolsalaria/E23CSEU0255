@@ -8,12 +8,14 @@ const {
 } = require("../services/vehicleService");
 const { validateVehiclePayload } = require("../utils/vehicleValidation");
 const { AppError } = require("../utils/errors");
+const { parseId } = require("../utils/validationHelpers");
+const { sendSuccess } = require("../utils/response");
 
 const getAllVehicles = async (req, res, next) => {
   try {
     await Log("backend", "info", "controller", "Fetching all vehicles.");
     const vehicles = listVehicles();
-    res.status(200).json({ data: vehicles });
+    sendSuccess(res, vehicles, "Vehicles retrieved.");
   } catch (error) {
     next(error);
   }
@@ -21,10 +23,7 @@ const getAllVehicles = async (req, res, next) => {
 
 const getVehicle = async (req, res, next) => {
   try {
-    const id = Number.parseInt(req.params.id, 10);
-    if (!Number.isFinite(id)) {
-      throw new AppError("Invalid vehicle id.", 400);
-    }
+    const id = parseId(req.params.id, "vehicle id");
 
     const vehicle = getVehicleById(id);
     if (!vehicle) {
@@ -32,7 +31,7 @@ const getVehicle = async (req, res, next) => {
     }
 
     await Log("backend", "info", "controller", `Fetched vehicle ${id}.`);
-    res.status(200).json({ data: vehicle });
+    sendSuccess(res, vehicle, "Vehicle retrieved.");
   } catch (error) {
     next(error);
   }
@@ -43,7 +42,7 @@ const createVehicleHandler = async (req, res, next) => {
     validateVehiclePayload(req.body);
     const vehicle = createVehicle(req.body);
     await Log("backend", "info", "controller", `Created vehicle ${vehicle.id}.`);
-    res.status(201).json({ data: vehicle });
+    sendSuccess(res, vehicle, "Vehicle created.", 201);
   } catch (error) {
     next(error);
   }
@@ -51,10 +50,7 @@ const createVehicleHandler = async (req, res, next) => {
 
 const updateVehicleHandler = async (req, res, next) => {
   try {
-    const id = Number.parseInt(req.params.id, 10);
-    if (!Number.isFinite(id)) {
-      throw new AppError("Invalid vehicle id.", 400);
-    }
+    const id = parseId(req.params.id, "vehicle id");
 
     validateVehiclePayload(req.body);
     const vehicle = updateVehicle(id, req.body);
@@ -63,7 +59,7 @@ const updateVehicleHandler = async (req, res, next) => {
     }
 
     await Log("backend", "info", "controller", `Updated vehicle ${id}.`);
-    res.status(200).json({ data: vehicle });
+    sendSuccess(res, vehicle, "Vehicle updated.");
   } catch (error) {
     next(error);
   }
@@ -71,10 +67,7 @@ const updateVehicleHandler = async (req, res, next) => {
 
 const deleteVehicleHandler = async (req, res, next) => {
   try {
-    const id = Number.parseInt(req.params.id, 10);
-    if (!Number.isFinite(id)) {
-      throw new AppError("Invalid vehicle id.", 400);
-    }
+    const id = parseId(req.params.id, "vehicle id");
 
     const removed = deleteVehicle(id);
     if (!removed) {
