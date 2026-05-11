@@ -1,1 +1,5 @@
-// Entry point placeholder for the notification backend service.
+const app = require("./app");
+
+module.exports = {
+	app,
+};
